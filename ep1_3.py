@@ -4,6 +4,7 @@ import numpy as np
 import os
 import pandas as pd
 import hashlib
+from sklearn.model_selection import train_test_split
 
 HOUSING_PATH = os.path.join("datasets", "housing")
 
@@ -27,9 +28,10 @@ def split_train_test_by_id(data, test_ratio, id_column, hash=hashlib.md5):
     return data.loc[~in_test_set], data.loc[in_test_set]
 
 
-housing_with_id = housing.reset_index()   # adds an `index` column
-train_set, test_set = split_train_test_by_id(housing_with_id, 0.2, "index")
+# housing_with_id = housing.reset_index()   # adds an `index` column
+# train_set, test_set = split_train_test_by_id(housing_with_id, 0.2, "index")
 
+train_set, test_set = train_test_split(housing, test_size=0.2, random_state=42)
 print(test_set.head())
 
 
