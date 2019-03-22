@@ -5,6 +5,7 @@ import os
 import pandas as pd
 import hashlib
 from sklearn.model_selection import train_test_split
+import matplotlib.pyplot as plt
 
 HOUSING_PATH = os.path.join("datasets", "housing")
 
@@ -33,6 +34,5 @@ def split_train_test_by_id(data, test_ratio, id_column, hash=hashlib.md5):
 
 train_set, test_set = train_test_split(housing, test_size=0.2, random_state=42)
 print(test_set.head())
-# print(housing["median_income"].hist())
-
-
+housing["median_income"].hist()
+plt.show()
