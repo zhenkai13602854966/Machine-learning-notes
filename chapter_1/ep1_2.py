@@ -4,17 +4,33 @@
 import numpy as np
 import os
 import pandas as pd
+import tarfile
+from six.moves import urllib
 
+DOWNLOAD_ROOT = "https://raw.githubusercontent.com/ageron/handson-ml/master/"
 HOUSING_PATH = os.path.join("datasets", "housing")
+HOUSING_URL = DOWNLOAD_ROOT + "datasets/housing/housing.tgz"
 
 
-# define a function to load data
+def fetch_housing_data(housing_url=HOUSING_URL, housing_path=HOUSING_PATH):
+    if not os.path.isdir(housing_path):
+        os.makedirs(housing_path)
+    tgz_path = os.path.join(housing_path, "housing.tgz")
+    urllib.request.urlretrieve(housing_url, tgz_path)
+    housing_tgz = tarfile.open(tgz_path)
+    housing_tgz.extractall(path=housing_path)
+    housing_tgz.close()
+
+
+# fetch_housing_data()
+
+
 def load_housing_data(housing_path=HOUSING_PATH):
-    cvs_path = os.path.join(housing_path, "housing.csv")
-    return pd.read_csv(cvs_path)
+    csv_path = os.path.join(housing_path, "housing.csv")
+    return pd.read_csv(csv_path)
 
 
-housing = load_housing_data()     # 调用函数，加载数据
+housing = load_housing_data()    # 调用函数，加载数据
 
 
 # define a function create a test dataset
@@ -25,6 +41,6 @@ def split_train_test(data, test_ratio):
     train_indices = shuffled_indices[test_set_size:]
     return data.iloc[train_indices], data.iloc[test_indices]
 
-print(housing.info())
-# train_set, test_set = split_train_test(housing, 0.2)
-# print(len(train_set), "train +", len(train_set), "test")
+
+train_set, test_set = split_train_test(housing, 0.2)
+print(len(train_set), "train +", len(train_set), "test")
